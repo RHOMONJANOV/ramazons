@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📅 Ramazon Taqvimi - Mart</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            background: #0f5132;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding: 15px;
+            width: 100%;
+            background: black;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        .navbar a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 10px 15px;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+        }
+
+        .navbar a:hover {
+            background: #198754;
+            transform: scale(1.1);
+            color: white;
+        }
+
+        .container {
+            max-width: 600px;
+            margin-top: 100px;
+            padding: 20px;
+            background: black;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .day {
+            width: 70px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #198754;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: white;
+        }
+
+        .day:hover {
+            background: #157347;
+            transform: scale(1.1);
+        }
+
+        .day.checked {
+            background: #ffc107;
+            color: black;
+            transform: scale(1.2);
+        }
+
+        .rank {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            padding: 10px 20px;
+            background: #198754;
+            border-radius: 8px;
+            color: white;
+            opacity: 0;
+            transform: scale(0.5);
+            transition: opacity 1s ease, transform 0.5s ease;
+        }
+
+        .rank.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .video-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+        }
+
+        .video-container {
+            width: 100%;
+            height: 100%;
+        }
+
+        .video-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <a href="index.html">🏠 Bosh sahifa</a>
+    <a href="taqvim.html">📅 Ramazon taqvimi</a>
+    <a href="duolar.html">📖 Duolar</a>
+    <a href="hadislar.html">📜 Hadislar</a>
+    <a href="namoz_duolari.html">🕌 Namoz Duolari</a>
+</div>
+
+<div class="container">
+    <h1>📅 Ramazon Taqvimi - Mart</h1>
+    <div class="calendar" id="calendar"></div>
+    <div class="rank" id="rank-container">🎖 Daraja: <span id="rank-name">Yo‘q</span></div>
+</div>
+
+<!-- Video oynasi -->
+<div class="video-overlay" id="video-overlay">
+    <div class="video-container">
+        <video id="custom-video">
+            <source id="video-source" src="" type="video/mp4">
+        </video>
+    </div>
+</div>
+
+<script>
+    let ranks = {
+        5: { title: "⭐ Nishonga nom", video: "ace_sd-[kZzalmcL5Pw].mp4" },
+        10: { title: "🥇 Mohir Ro‘za Ustasi", video: "ace_sd-[kZzalmcL5Pw].mp4" },
+        15: { title: "🔥 Platina Ustasi", video: "ace_sd-[kZzalmcL5Pw].mp4" },
+        20: { title: "💎 Diamond Ro‘za Ustasi", video: "ace_sd-[kZzalmcL5Pw].mp4" },
+        25: { title: "♠️ ACE Usta", video: "ace_sd-[kZzalmcL5Pw].mp4" },
+        30: { title: "🏆 Full Dominator", video: "ace_sd-[kZzalmcL5Pw].mp4" }
+    };
+
+    let watchedDays = new Set(); // Avval bosilgan kunlarni eslab qolish uchun
+
+    function createCalendar() {
+        let calendar = document.getElementById("calendar");
+        calendar.innerHTML = "";
+        for (let day = 1; day <= 30; day++) {
+            let div = document.createElement("div");
+            div.classList.add("day");
+            div.innerText = `${day}-Mart`;
+            div.onclick = () => toggleDay(div, day);
+            calendar.appendChild(div);
+        }
+    }
+
+    function toggleDay(dayElement, day) {
+        if (!watchedDays.has(day)) { // Agar bu kun oldin bosilmagan bo‘lsa
+            watchedDays.add(day); // Uni bosilgan sifatida belgilaymiz
+            dayElement.classList.add("checked");
+            updateRank();
+        }
+    }
+
+    function updateRank() {
+        let checkedDays = watchedDays.size; // Faqat yangi bosilgan kunlar sanaladi
+        let rank = "Yo‘q";
+        let videoFile = "";
+
+        for (let key in ranks) {
+            if (checkedDays >= key) {
+                rank = ranks[key].title;
+                videoFile = ranks[key].video;
+            }
+        }
+
+        let rankElement = document.getElementById("rank-name");
+        rankElement.innerText = rank;
+
+        if (videoFile) {
+            showVideo(videoFile);
+        }
+    }
+
+    function showVideo(videoFile) {
+        let videoOverlay = document.getElementById("video-overlay");
+        let video = document.getElementById("custom-video");
+        let videoSource = document.getElementById("video-source");
+
+        videoSource.src = videoFile;
+        video.load();
+        video.play();
+        videoOverlay.style.display = "flex";
+
+        video.onended = () => {
+            videoOverlay.style.display = "none";
+            showRankAnimation();
+        };
+    }
+
+    function showRankAnimation() {
+        let rankContainer = document.getElementById("rank-container");
+        rankContainer.classList.add("show");
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        createCalendar();
+    });
+</script>
+
+</body>
+</html>

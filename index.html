@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ramazon Muborak</title>
+  <style>
+    .main-style {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      color: white;
+    }
+    .navbar {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.2);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(10px);
+    }
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      font-size: 18px;
+      font-weight: bold;
+      padding: 10px;
+      transition: 0.3s;
+    }
+    .navbar a:hover {
+      color: #ffcc00;
+    }
+    .container {
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 30px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+    .time-box {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 15px;
+      margin: 10px;
+      border-radius: 8px;
+      font-size: 20px;
+      font-weight: bold;
+    }
+    .quote {
+      font-style: italic;
+      font-size: 18px;
+      margin-top: 20px;
+    }
+    .btn {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 12px 25px;
+      background: #ffcc00;
+      color: #1e3c72;
+      font-size: 18px;
+      font-weight: bold;
+      border-radius: 25px;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+    .btn:hover {
+      background: #ffdb4d;
+    }
+  </style>
+</head>
+<body class="main-style">
+
+<!-- Navbar -->
+<div class="navbar">
+  <a href="index.html">🏠 Bosh sahifa</a>
+  <a href="taqvim.html">📅 Ramazon taqvimi</a>
+  <a href="duolar.html">📖 Duolar</a>
+  <a href="hadislar.html">📜 Hadislar</a>
+</div>
+
+<!-- Asosiy qism -->
+<div class="container">
+  <h1>🌙 Ramazon Muborak!</h1>
+  <p class="time-box">⏳ Saharlik vaqti: <span>04:30</span></p>
+  <p class="time-box">🌅 Iftar vaqti: <span>18:45</span></p>
+  <p class="quote">"Albatta, ro‘za tutuvchilar mukofotlarini cheksiz olurlar." (Baqara, 2:183)</p>
+  <a href="taqvim.html" class="btn">Ramazon taqvimini ko‘rish 📅</a>
+</div>
+
+</body>
+</html>
